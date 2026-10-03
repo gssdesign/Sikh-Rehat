@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs><radialGradient id="g" cx="35%" cy="28%" r="85%"><stop offset="0" stop-color="#f3a04f"/><stop offset=".55" stop-color="#d4691a"/><stop offset="1" stop-color="#9a3f08"/></radialGradient>
+  <defs>
     <path id="blade" d="M256 26 C 268 48 292 68 292 92 L 279 102 L 279 318 L 233 318 L 233 102 L 220 92 C 220 68 244 48 256 26 Z"/>
     <path id="kl" d="M240 398 C 98 392 34 252 150 92 C 104 210 136 330 252 372 Z"/>
     <path id="kr" d="M272 398 C 414 392 478 252 362 92 C 408 210 376 330 260 372 Z"/>
@@ -10,20 +10,17 @@
       <use href="#kr" fill="#000" stroke="#000" stroke-width="22"/>
     </mask>
   </defs>
-  <rect width="512" height="512" fill="url(#g)"/>
-  <rect x="34" y="34" width="444" height="444" rx="70" fill="none" stroke="#f7dca6" stroke-opacity=".7" stroke-width="5"/>
-  <rect x="46" y="46" width="420" height="420" rx="60" fill="none" stroke="#f7dca6" stroke-opacity=".35" stroke-width="2.5"/>
-  <g transform="translate(256 262) scale(.74) translate(-256 -240)"><g fill="#1c2650">
-    <circle cx="256" cy="236" r="86" fill="none" stroke="#1c2650" stroke-width="30" mask="url(#gap)"/>
+  <g fill="currentColor">
+    <circle cx="256" cy="236" r="86" fill="none" stroke="currentColor" stroke-width="30" mask="url(#gap)"/>
     <use href="#blade"/>
     <use href="#kl"/>
     <use href="#kr"/>
     <rect x="202" y="314" width="108" height="22" rx="11"/>
     <rect x="244" y="334" width="24" height="70" rx="8"/>
-    <path d="M228 400 L 302 450" fill="none" stroke="#1c2650" stroke-width="17" stroke-linecap="round"/>
-    <path d="M284 400 L 210 450" fill="none" stroke="#1c2650" stroke-width="17" stroke-linecap="round"/>
+    <path d="M228 400 L 302 450" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round"/>
+    <path d="M284 400 L 210 450" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round"/>
     <circle cx="205" cy="455" r="15"/>
     <circle cx="307" cy="455" r="15"/>
     <circle cx="256" cy="424" r="18"/>
-  </g></g>
+  </g>
 </svg>

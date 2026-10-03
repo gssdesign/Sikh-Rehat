@@ -88,11 +88,11 @@ button { font: inherit; color: inherit; }
 /* header: one row, title on the left, two tools on the right */
 .topbar { display: flex; align-items: center; gap: 10px; padding: 8px 12px 6px 16px; min-height: 56px; }
 .seal {
-  width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center;
+  width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center;
   background: radial-gradient(circle at 35% 30%, #e48a3c, var(--kesri) 60%, #8a3c08);
   color: #fff5df; box-shadow: 0 0 0 1.5px var(--leaf), 0 0 0 2.5px var(--gold);
 }
-.seal svg { width: 20px; height: 20px; }
+.seal svg { width: 27px; height: 27px; color: var(--neela-ink, #1c2650); }
 .brand { flex: 1; min-width: 0; line-height: 1.15; }
 .brand .pa { font-family: var(--f-gur); font-weight: 700; font-size: 1.18rem; }
 .brand .sub { font-size: .8rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -404,7 +404,7 @@ button { font: inherit; color: inherit; }
   <!-- RULES -->
   <section class="view" id="view-rules" aria-label="Rules">
     <header class="topbar" id="topbar">
-      <div class="seal" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4v30M20 34h8M24 34v9"/><path d="M24 4l3.5 6v22h-7V10z"/><path d="M15 15a13 13 0 0 0 0 20M33 15a13 13 0 0 1 0 20"/></svg></div>
+      <div class="seal" aria-hidden="true"><svg viewBox="16 16 480 480" aria-hidden="true"><defs> <path id="hk-blade" d="M256 26 C 268 48 292 68 292 92 L 279 102 L 279 318 L 233 318 L 233 102 L 220 92 C 220 68 244 48 256 26 Z"/> <path id="hk-kl" d="M240 398 C 98 392 34 252 150 92 C 104 210 136 330 252 372 Z"/> <path id="hk-kr" d="M272 398 C 414 392 478 252 362 92 C 408 210 376 330 260 372 Z"/> <mask id="hk-gap"> <rect width="512" height="512" fill="#fff"/> <use href="#hk-blade" fill="#000" stroke="#000" stroke-width="22"/> <use href="#hk-kl" fill="#000" stroke="#000" stroke-width="22"/> <use href="#hk-kr" fill="#000" stroke="#000" stroke-width="22"/> </mask> </defs> <g fill="currentColor"> <circle cx="256" cy="236" r="86" fill="none" stroke="currentColor" stroke-width="30" mask="url(#hk-gap)"/> <use href="#hk-blade"/> <use href="#hk-kl"/> <use href="#hk-kr"/> <rect x="202" y="314" width="108" height="22" rx="11"/> <rect x="244" y="334" width="24" height="70" rx="8"/> <path d="M228 400 L 302 450" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round"/> <path d="M284 400 L 210 450" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round"/> <circle cx="205" cy="455" r="15"/> <circle cx="307" cy="455" r="15"/> <circle cx="256" cy="424" r="18"/> </g></svg></div>
       <div class="brand"><div class="pa">ਸਿੱਖ ਰਹਿਤ</div><div class="sub" id="sub" aria-live="polite"></div></div>
       <button class="icon-btn" type="button" id="openSearch" aria-label="Search rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
       <button class="icon-btn" type="button" id="openFilter" aria-label="Filter rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="pip" id="pip" hidden></span></button>
