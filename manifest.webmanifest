@@ -1,0 +1,18 @@
+{
+  "name": "ਸਿੱਖ ਰਹਿਤ · Sikh Rehat",
+  "short_name": "Sikh Rehat",
+  "description": "64 rules from Bhai Nand Lal's rahitname as swipeable cards, with a daily Nitnem calendar.",
+  "lang": "pa",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#e8d4a6",
+  "theme_color": "#1c2650",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
