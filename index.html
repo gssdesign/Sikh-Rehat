@@ -131,14 +131,14 @@ button { font: inherit; color: inherit; }
 /* ---------- deck ---------- */
 .deck-wrap { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; }
 .deck {
-  flex: 1; min-height: 0; display: flex; gap: 10px;
+  flex: 1; min-height: 0; display: flex; gap: 12px;
   overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none;
-  padding: 10px calc(50% - min(45cqw, 210px)) 12px;
+  padding: 10px calc(50% - min(41cqw, 200px)) 12px;
   overscroll-behavior-x: contain; position: relative;
 }
 .deck::-webkit-scrollbar { display: none; }
 .slot {
-  flex: none; width: min(90cqw, 420px); height: 100%;
+  flex: none; width: min(82cqw, 400px); height: 100%;
   scroll-snap-align: center; scroll-snap-stop: always;
   perspective: 1000px;
 }
@@ -239,6 +239,12 @@ button { font: inherit; color: inherit; }
   .deck-wrap:hover .nav-arrow:not(:disabled) { opacity: .92; }
 }
 
+.swipe-hint { position: absolute; left: 50%; bottom: 26px; z-index: 5; transform: translateX(-50%); pointer-events: none;
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; white-space: nowrap;
+  background: var(--bar); color: var(--bar-ink); font-size: .84rem; box-shadow: var(--shadow); transition: opacity .4s; }
+.swipe-hint svg { width: 30px; height: 18px; color: #f2a14e; animation: swipe 1.6s ease-in-out infinite; }
+.swipe-hint.gone { opacity: 0; }
+@keyframes swipe { 0%, 100% { transform: translateX(6px); } 50% { transform: translateX(-6px); } }
 .empty { flex: 1; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--ink-soft); }
 .empty .t { font-family: var(--f-display); font-size: 1.3rem; color: var(--ink); }
 .btn { border-radius: 999px; padding: 10px 18px; cursor: pointer; font-weight: 600; border: 1px solid var(--kesri); background: none; color: var(--kesri); }
@@ -279,6 +285,12 @@ button { font: inherit; color: inherit; }
 .cal-head .streak { color: var(--kesri); font-weight: 600; }
 .cal-nav { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--hair); background: transparent; display: grid; place-items: center; cursor: pointer; color: var(--ink); }
 .cal-nav:disabled { opacity: .3; cursor: default; }
+.cal-toggle { display: inline-flex; align-items: center; gap: 4px; height: 34px; padding: 0 10px 0 12px; border-radius: 999px; border: 1px solid var(--hair);
+  background: transparent; color: var(--kesri); font-weight: 600; font-size: .84rem; cursor: pointer; flex: none; }
+.cal-toggle svg { width: 15px; height: 15px; transition: transform .25s; }
+.cal-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.cal.week .cal-nav, .cal.week .cal-key { display: none; }
+.cal-grid.swap { animation: rise .35s cubic-bezier(.2,.8,.2,1); }
 .cal-nav svg { width: 15px; height: 15px; }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
 .dow { font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); padding-bottom: 2px; }
@@ -414,6 +426,7 @@ button { font: inherit; color: inherit; }
       <div class="deck" id="deck" aria-roledescription="carousel" aria-label="Rule cards" tabindex="0"></div>
       <button class="nav-arrow prev" type="button" id="prev" aria-label="Previous rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <button class="nav-arrow next" type="button" id="next" aria-label="Next rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="swipe-hint" id="swipeHint" hidden aria-hidden="true"><svg viewBox="0 0 30 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M27 9H3M8 4L3 9l5 5M22 4l5 5-5 5"/></svg>Swipe for the next rule</div>
       <div class="empty" id="empty" hidden><div><div class="t">No rule matches</div><div>Try another word, or clear the filters.</div><button class="btn" type="button" id="resetAll">Show all 64 rules</button></div></div>
     </div>
   </section>
@@ -421,11 +434,12 @@ button { font: inherit; color: inherit; }
   <!-- DAILY -->
   <section class="view" id="view-daily" aria-label="Daily routine" hidden>
     <div class="page"><div class="page-inner">
-      <section class="cal" aria-label="Nitnem calendar">
+      <section class="cal week" id="cal" aria-label="Nitnem calendar">
         <div class="cal-head">
           <div class="t"><h2 id="calMonth"></h2><p id="calSummary"></p></div>
           <button class="cal-nav" type="button" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
           <button class="cal-nav" type="button" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+          <button class="cal-toggle" type="button" id="calToggle" aria-expanded="false" aria-controls="calGrid"><span id="calToggleText">Month</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
         </div>
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-key" id="calKey"></div>
@@ -733,6 +747,17 @@ $("#resetAll").addEventListener("click", () => { state.q = ""; $("#q").value = "
 /* ---------- deck ---------- */
 const deck = $("#deck");
 let raf = 0, settleT = 0, entered = null;
+/* first visit: show the hint and nudge the deck so the next card slides into view and back */
+let hintDone = !!store.get("rahit-swiped");
+function dismissHint() {
+  hintDone = true; store.set("rahit-swiped", true);
+  const h = $("#swipeHint"); h.classList.add("gone"); setTimeout(() => { h.hidden = true; }, 400);
+}
+function showHint() {
+  if (hintDone || !state.list.length) return;
+  $("#swipeHint").hidden = false;
+  if (!reduceMotion) setTimeout(() => { if (!hintDone && state.index === 0) deck.scrollTo({ left: deck.scrollLeft + deck.clientWidth * 0.28, behavior: "smooth" }); }, 900);
+}
 function renderDeck() {
   const has = state.list.length > 0;
   deck.hidden = !has; $("#empty").hidden = has;
@@ -772,19 +797,20 @@ function onDeckScroll() {
       if (Math.abs(d) < 2.2) {
         const k = Math.min(1, Math.abs(d)), dc = Math.max(-1.6, Math.min(1.6, d));
         c.style.transformOrigin = d < 0 ? "100% 50%" : "0% 50%";
-        c.style.transform = `translateZ(${-k * 120}px) rotateY(${-dc * 38}deg) scale(${1 - k * 0.05})`;
-        c.style.opacity = String(1 - k * 0.45);
+        c.style.transform = `translateZ(${-k * 24}px) rotateY(${-dc * 20}deg) scale(${1 - k * 0.03})`;
+        c.style.opacity = String(1 - k * 0.22);
         c.style.setProperty("--d", d.toFixed(3));
         const sh = c.querySelector(".shade");
-        sh.style.opacity = String(k * 0.9);
+        sh.style.opacity = String(k * 0.55);
         sh.style.background = `linear-gradient(${d < 0 ? 270 : 90}deg, rgba(40,20,0,.45), transparent 70%)`;
-      } else { c.style.transform = "translateZ(-120px) scale(.95)"; c.style.opacity = ".55"; }
+      } else { c.style.transform = "translateZ(-24px) scale(.97)"; c.style.opacity = ".7"; }
     }
     const bestCard = cards[best].firstElementChild;
     if (!bestCard.classList.contains("is-active")) {
       deck.querySelectorAll(".card.is-active").forEach(c => c.classList.remove("is-active"));
       bestCard.classList.add("is-active");
     }
+    if (best !== 0 && !hintDone) dismissHint();
     state.index = best;
     const filtered = state.list.length < rules.length;
     $("#sub").textContent = filtered ? `${best + 1} of ${state.list.length} matching` : `Rule ${best + 1} of ${rules.length}`;
@@ -849,37 +875,55 @@ function streak() {
   while ((!start || d >= start) && doneOn(d) >= dailyIds.size) { n++; d.setDate(d.getDate() - 1); }
   return n;
 }
-function renderCalendar(stampToday = false) {
+let calOpen = !!store.get("rahit-cal-open");
+function dayCell(date, ctx, stampToday) {
+  const { now, today0, start, total } = ctx, isToday = sameDay(date, now);
+  const pre = !start || date < start, future = date > today0;
+  const n = pre ? 0 : doneOn(date);
+  const state = future ? "future" : pre ? "pre" : n >= total ? "full" : n ? "part" : isToday ? "" : "miss";
+  const cls = ["day", state, isToday ? "today" : "", start && sameDay(date, start) ? "start" : "", isToday && stampToday ? "stamp" : ""].filter(Boolean).join(" ");
+  const label = `${date.toLocaleDateString(undefined, { day: "numeric", month: "long" })}: ${
+    { future: "upcoming", pre: "before you started", full: "all rules followed", part: `${n} of ${total}`, miss: "missed", "": "not started yet" }[state]}${start && sameDay(date, start) ? " (first day)" : ""}`;
+  return { html: `<div class="${cls}" role="gridcell" aria-label="${label}">${date.getDate()}</div>`, full: state === "full" };
+}
+function renderCalendar(stampToday = false, animate = false) {
   const now = new Date(), total = dailyIds.size, start = startDate();
   const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const y = calMonth.getFullYear(), mo = calMonth.getMonth();
-  const days = new Date(y, mo + 1, 0).getDate(), lead = (new Date(y, mo, 1).getDay() + 6) % 7;
+  const ctx = { now, today0, start, total };
   let full = 0, cells = ["M", "T", "W", "T", "F", "S", "S"].map(w => `<div class="dow" aria-hidden="true">${w}</div>`).join("");
-  for (let i = 0; i < lead; i++) cells += `<div></div>`;
-  for (let dd = 1; dd <= days; dd++) {
-    const date = new Date(y, mo, dd), isToday = sameDay(date, now);
-    const pre = !start || date < start, future = date > today0;
-    const n = pre ? 0 : doneOn(date);
-    const state = future ? "future" : pre ? "pre" : n >= total ? "full" : n ? "part" : isToday ? "" : "miss";
-    const cls = ["day", state, isToday ? "today" : "", start && sameDay(date, start) ? "start" : "", isToday && stampToday ? "stamp" : ""].filter(Boolean).join(" ");
-    if (state === "full") full++;
-    const label = `${date.toLocaleDateString(undefined, { day: "numeric", month: "long" })}: ${
-      { future: "upcoming", pre: "before you started", full: "all rules followed", part: `${n} of ${total}`, miss: "missed", "": "not started yet" }[state]}${start && sameDay(date, start) ? " (first day)" : ""}`;
-    cells += `<div class="${cls}" role="gridcell" aria-label="${label}">${dd}</div>`;
+  if (calOpen) {
+    const y = calMonth.getFullYear(), mo = calMonth.getMonth();
+    const days = new Date(y, mo + 1, 0).getDate(), lead = (new Date(y, mo, 1).getDay() + 6) % 7;
+    for (let i = 0; i < lead; i++) cells += `<div></div>`;
+    for (let dd = 1; dd <= days; dd++) { const c = dayCell(new Date(y, mo, dd), ctx, stampToday); cells += c.html; full += c.full; }
+    $("#calMonth").textContent = calMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+    $("#calNext").disabled = y === now.getFullYear() && mo === now.getMonth();
+    const first = start || now; /* can't browse to months before tracking began */
+    $("#calPrev").disabled = y < first.getFullYear() || (y === first.getFullYear() && mo <= first.getMonth());
+  } else {
+    const monday = new Date(today0); monday.setDate(today0.getDate() - (today0.getDay() + 6) % 7);
+    for (let i = 0; i < 7; i++) { const d = new Date(monday); d.setDate(monday.getDate() + i); const c = dayCell(d, ctx, stampToday); cells += c.html; full += c.full; }
+    $("#calMonth").textContent = "This week";
   }
-  $("#calGrid").innerHTML = cells;
-  $("#calMonth").textContent = calMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  const grid = $("#calGrid"); grid.innerHTML = cells;
+  if (animate && !reduceMotion) { grid.classList.remove("swap"); void grid.offsetWidth; grid.classList.add("swap"); }
+  $("#cal").classList.toggle("week", !calOpen);
+  $("#calToggle").setAttribute("aria-expanded", calOpen);
+  $("#calToggleText").textContent = calOpen ? "Week" : "Month";
+  $("#calToggle").setAttribute("aria-label", calOpen ? "Show this week only" : "Show the whole month");
   const st = streak();
   $("#calSummary").innerHTML = start
-    ? `${full} full day${full === 1 ? "" : "s"} this month${st ? ` · <span class="streak">${st}-day streak</span>` : ""}`
-    : "Your calendar starts on the day you tick your first rule.";
+    ? `${full} full day${full === 1 ? "" : "s"} this ${calOpen ? "month" : "week"}${st ? ` · <span class="streak">${st}-day streak</span>` : ""}`
+    : "Starts the day you tick your first rule.";
   $("#calKey").innerHTML = start
     ? `<span><i class="k-full"></i>All followed</span><span><i class="k-part"></i>Some</span><span><i class="k-miss"></i>Missed</span>`
     : "";
-  $("#calNext").disabled = y === now.getFullYear() && mo === now.getMonth();
-  const first = start || now; /* can't browse to months before tracking began */
-  $("#calPrev").disabled = y < first.getFullYear() || (y === first.getFullYear() && mo <= first.getMonth());
 }
+$("#calToggle").addEventListener("click", () => {
+  calOpen = !calOpen; store.set("rahit-cal-open", calOpen);
+  if (calOpen) { const d = new Date(); calMonth = new Date(d.getFullYear(), d.getMonth(), 1); }
+  renderCalendar(false, true);
+});
 $("#calPrev").addEventListener("click", () => { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1); renderCalendar(); });
 $("#calNext").addEventListener("click", () => { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1); renderCalendar(); });
 
@@ -1002,6 +1046,7 @@ document.querySelectorAll(".app, .screen").forEach(el => el.addEventListener("sc
 
 applyFilters();
 renderAbout();
+showHint();
 const m = /^#rule-(\d+)$/.exec(location.hash);
 if (m) openRule(+m[1]);
 else if (location.hash === "#daily") showView("daily");
